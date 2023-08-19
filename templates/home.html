@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>EasyParkNow</title>
+    <link rel="icon" href="/static/titleIcon.png" type="image/x-icon">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        /* Your existing CSS styles for the navbar */
+        .navbar {
+            background-color: #2894f7;
+            overflow: hidden;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+        }
+
+        .navbar-logo img {
+            width: 200px;
+            height: auto;
+        }
+
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            padding: 14px 16px;
+            font-size: 18px;
+        }
+
+        .navbar a:hover {
+            background-color: #ddd;
+            color: black;
+        }
+
+        .active {
+            background-color: #4CAF50;
+        }
+
+        /* Your existing CSS styles for the cover section */
+        .cover {
+            background-size: cover;
+            height: 70vh; /* Set the height to 70% of the viewport height */
+            width: 100vw;
+            max-width: 100%;
+            position: relative;
+            display: flex;
+        }
+
+        .cover-content {
+            text-align: center;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .cover-header {
+            background-color: #2894f7;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+            display: inline-block;
+            position: relative;
+            z-index: 1;
+        }
+
+        .car-logo {
+            position: absolute;
+            top: -50px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 80px;
+            background-image: url('/static/icon.jpg');
+            background-size: cover;
+            border-radius: 50%;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+            z-index: 2;
+        }
+
+      
+        .search-container {
+            position: relative;
+            margin-top: 20px;
+            width: 700px;
+            margin: 5px;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 15px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #fff;
+            padding-right: 40px; /* Space for the button */
+        }
+
+        /* Yellow search button */
+        .search-button {
+            position: absolute;
+            top: 0;
+            right: 0;
+            left: 20;
+            padding: 10px;
+            background-color: yellow;
+            color: #000;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 5px;
+        }
+
+        /* Style the button on hover */
+        .search-button:hover {
+            background-color: #fdd835; /* Lighter yellow on hover */
+        }
+
+          /* New styles for the card section */
+     
+
+          main {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+        
+        }
+
+        .card {
+            text-align: center;
+            max-width: 300px;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px;
+        
+        }
+
+        .card-image {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            overflow: hidden;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+            margin: 0 auto; /* Center the image horizontally */
+        }
+
+        .card-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .card-text {
+            margin-top: 10px;
+            text-align: center;
+        }
+       /* Scrollbars */
+       body::-webkit-scrollbar {
+            width: 0.5em;
+        }
+
+        body::-webkit-scrollbar-track {
+            background-color: transparent;
+        }
+
+        body::-webkit-scrollbar-thumb {
+            background-color: rgba(0, 0, 0, 0.3);
+        }
+
+        /* Add scrollbar styling for Firefox and other browsers */
+        body::-webkit-scrollbar-thumb:horizontal {
+            border-radius: 2px;
+        }
+
+        body::-webkit-scrollbar-thumb:vertical {
+            border-radius: 2px;
+        }
+
+        /* Media queries for responsiveness */
+        @media (max-width: 768px) {
+            .navbar-logo img {
+                width: 150px;
+            }
+
+            .navbar a {
+                font-size: 16px;
+            }
+
+            .cover {
+                height: 50vh;
+            }
+
+            .cover-header {
+                font-size: 24px;
+            }
+
+            .card-images {
+                flex-wrap: wrap;
+            }
+
+            .card-image {
+                margin: 10px;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .navbar a {
+                padding: 8px;
+            }
+
+            .cover {
+                height: 40vh;
+            }
+
+            .cover-header {
+                font-size: 20px;
+                padding: 10px;
+            }
+
+            .card {
+                padding: 10px;
+            }
+
+            .card-images {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .card-image {
+                margin: 10px;
+            }
+        }
+
+        .full-width-card {
+    background-color: #f2f2f2;
+    padding: 40px 0;
+    display: flex;
+    justify-content: center;
+}
+
+.full-width-card-content {
+    max-width: 1200px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+}
+
+.full-width-card-image {
+    width: 50%;
+    height: 300px; /* Adjust the height as needed */
+    background-image: url('/static/image.jpg'); /* Add your image path here */
+    background-size: cover;
+    background-position: center;
+}
+
+.full-width-card-text {
+    width: 50%;
+    height: 250px;
+    padding: 20px;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+/* Media query for responsiveness */
+@media (max-width: 768px) {
+    .full-width-card-content {
+        flex-direction: column;
+    }
+
+    .full-width-card-image,
+    .full-width-card-text {
+        width: 100%;
+    }
+}
+
+footer {
+    background-color: #222;
+    color: #fff;
+    padding: 20px 0;
+    text-align: center;
+}
+
+.footer-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.footer-logo img {
+    width: 100px;
+    height: auto;
+}
+
+.footer-text p {
+    font-size: 16px;
+    margin: 0;
+}
+
+.footer-social {
+    margin-top: 20px;
+}
+
+.footer-social a {
+    font-size: 24px;
+    color: #fff;
+    margin: 0 10px;
+    text-decoration: none;
+    transition: color 0.3s;
+}
+
+.footer-social a:hover {
+    color: #f0c61f;
+}
+
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <div class="navbar-logo">
+            <img src="/static/background.png" alt="Logo">
+        </div>
+        <div class="navbar-links">
+            <!-- Add your navigation links here -->
+            <a class="nav-item nav-link active" href="{{url_for('home')}}"><b>Home</b></a>
+            <a class="nav-item nav-link active" href="{{url_for('book')}}"><b>Book</b></a>
+            <a class="nav-item nav-link active" href="{{url_for('history')}}"><b>History</b></a>
+        </div>
+        <div class="navbar-option">
+            <a class="nav-item nav-link active" href="{{url_for('logout')}}"><b>Logout</b></a>
+        </div>
+    </div>
+
+
+    
+    <div class="cover" style="background: url(/static/webgl.png) no-repeat center center; background-size: cover;">
+        <div class="cover-content">
+            <div class="car-logo"></div>
+            <h1 class="cover-header"><a href="{{url_for('book')}}">Reserve Parking Now & Save</a></h1>
+            <!-- <div class="search-container">
+                <input type="search" id="searchInput" placeholder="Search...">
+                <button onclick="getDirections()">Search</button>
+            </div> -->
+        </div>
+    </div>
+    <main>
+        <div class="card">
+            <div class="card-image">
+                <img src="/static/location.jpeg" alt="location">
+            </div>
+            <div class="card-text">
+                <h3>Look</h3>
+                <p>Search and compare prices at thousands of parking facilities across Islamabad,Pakistan</p>
+            </div>
+        </div>
+    
+        <div class="card">
+            <div class="card-image">
+                <img src="/static/mobile.jpeg" alt="Booked">
+            </div>
+            <div class="card-text">
+               <h3>Book</h3>
+                <p>Pay securely and recieve a prepaid parking pass instantly via email or in the app</p>
+            </div>
+        </div>
+    
+        <div class="card">
+            <div class="card-image">
+                <img src="/static/car.jpeg" alt="Park">
+            </div>
+            <div class="card-text">
+                <h3>Park</h3>
+                <p>When you arrive, follow the instructions included in your pass, park and go!</p>
+            </div>
+        </div>
+    </main>
+    <div class="full-width-card">
+        <div class="full-width-card-content">
+            <div class="full-width-card-image"></div>
+            <div class="full-width-card-text">
+                <h3>Effortless Parking Management</h3>
+                <p>Experience the future of urban mobility with our innovative smart parking system. Our advanced technology ensures a stress-free parking experience, helping you save time and reduce frustration. Discover the convenience of real-time parking availability updates, secure online booking, and seamless navigation.</p>
+    <p>Unlock a new era of convenience, efficiency, and peace of mind. Say goodbye to circling the block in search of a parking space—say hello to hassle-free parking at your fingertips. Join us in reshaping the future of parking through technology that works for you.</p>
+            </div>
+        </div>
+    </div>
+    <footer>
+        <div class="footer-content">
+            <div class="footer-logo">
+                <img src="/static/background.png" alt="Logo">
+            </div>
+            <div class="footer-text">
+                <p>Your Smart Parking Solution</p>
+            </div>
+        </div>
+        <div class="footer-social">
+            <a href="#"><i class="fab fa-facebook"></i></a>
+            <a href="#"><i class="fab fa-twitter"></i></a>
+            <a href="#"><i class="fab fa-instagram"></i></a>
+        </div>
+    </footer>
+    
+
+    <script>
+        function getDirections() {
+            var destination = document.getElementById('searchInput').value;
+            window.location.href = '/map?destination=' + encodeURIComponent(destination);
+        }
+        
+    </script>
+        
+   
+    
+</body>
+</html>

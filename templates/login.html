@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EasyParkNow</title>
+    <link rel="icon" href="/static/titleIcon.png" type="image/x-icon">
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+    <script>
+        config = {
+    "apiKey": "AIzaSyD565dx672kuJqDlzO1Lsb1Q9ClJPxbBYc",
+    "authDomain": "smart-parking-system-edcde.firebaseapp.com",
+    "databaseURL": "https://smart-parking-system-edcde-default-rtdb.firebaseio.com/",
+    "projectId": "smart-parking-system-edcde",
+    "storageBucket": "smart-parking-system-edcde.appspot.com",
+    "messagingSenderId": "1053910320425",
+    "appId": "1:1053910320425:web:c4d6735ec1764bcea56338",
+    "measurementId": "MRRBHF1GGT"
+}
+
+firebase  = pyrebase.initialize_app(config)
+    </script>
+</head>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+} 
+
+section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100vh;
+    background: url('https://wallpapercave.com/wp/wp2150006.png') no-repeat;
+    background-size: cover;
+    background-position: center;
+    animation: animateBg 5s linear infinite;
+}
+
+@keyframes animateBg {
+    100% {
+        filter: hue-rotate(360deg)
+    }
+}
+
+.login-box {
+    position: relative;
+    width: 600px;
+    height: 450px;
+    background: transparent;
+    border: 2px solid rgba(119, 92, 92, 0.5);
+    border-radius: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    backdrop-filter: blur(15px);
+
+}
+
+
+h2 {
+    font-size: 2.5rem;
+    color: #fff;
+    text-align: center;
+}
+
+.input-box {
+    position: relative;
+    width: 310px;
+    margin: 30px 0;
+    border-bottom: 2px solid #fff;
+}
+
+.input-box label {
+    position: absolute;
+    top: 50%;
+    left: 5px;
+    transform: translateY(-50%);
+    font-size: 1rem;
+    color: #fff;
+    pointer-events: none;
+    transition: .5s;
+}
+
+.input-box input:focus~label,
+.input-box input:valid~label {
+    top: -5px;
+}
+
+.input-box input {
+    width: 100%;
+    height: 50px;
+    background: transparent;
+    border: none;
+    outline: none;
+    font-size: 1rem;
+    color: #fff;
+    padding: 0 35px 0 5px;
+}
+
+.input-box .icon {
+    position: absolute;
+    right: 8px;
+    color: #fff;
+    font-size: 1.2rem;
+    line-height: 57px;
+}
+
+.remember-forgot {
+    margin: -15px 0 15px;
+    font-size: .9em;
+    color: #fff;
+    display: flex;
+    justify-content: space-between;
+}
+
+.remember-forgot label input {
+    margin-right: 3px ;
+}
+
+.remember-forgot a {
+    color: #fff;
+    text-decoration: none;}
+
+    .remember-forgot a:hover {
+       text-decoration: underline;
+    }
+
+    button {
+        width: 100%;
+        height: 40px;
+        background: #fff;
+        border: none;
+        outline: none;
+        border-radius: 40px;
+        cursor: pointer;
+        font-size: 1rem;
+        color: #000;
+        font-weight: 500;
+    }    
+
+    .register-link {
+        font-size: .9rem;
+        color: #fff;
+        text-align: center;
+        margin: 25px 0 10px;
+    }
+
+    .register-link p a {
+        color: #fff;
+        text-decoration: none;
+        font-weight: 600;    
+    }
+
+    .register-link p a:hover {
+        text-decoration: underline;
+    }
+
+    @media (max-width: 360px) {
+        .login-box {
+            width: 100%;
+            height: 100vh;
+            border: none;
+            border-radius: 0;
+        }
+
+        .input-box {
+            width: 290px;
+        }
+    }
+</style>
+<body>
+     <section>
+    <div class="login-box">
+        <form action="/" method="POST" onsubmit="return loginWithFirebase()">
+            <h2>Login</h2>
+            <div class="input-box">
+                <span class="icon">
+                    <ion-icon name="mail"></ion-icon>
+                </span>
+                <input type="email" id="email" name="email" required>
+                <label>Email</label>
+            </div>
+
+            <div class="input-box">
+                <span class="icon">
+                    <ion-icon name="lock-closed"></ion-icon>
+                </span>
+                <input type="password" name="password" required>
+                <label>Password</label>
+            </div>
+
+            <div class="remember-forgot">
+                <label><input type="checkbox"> Remember me</label>
+                <a  href="{{url_for('forgot_password')}}">Forgot Password</a>
+            </div>
+
+            <button type="submit">Login</button>
+            <div class="register-link">
+                <p>Don't have an account? <a  href="{{url_for('register')}}">Register</a></p>
+            </div>
+
+
+
+        </form>
+    </div>
+    </section>
+    
+
+    <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+
+    <script>
+        function loginWithFirebase() {
+            var email = document.getElementById('email').value;
+            var password = document.getElementById('password').value;
+
+            // Firebase email/password authentication
+            firebase.auth().signInWithEmailAndPassword(email, password)
+                .then((userCredential) => {
+                    // Login successful, redirect to home page
+                    window.location.href = '/home';
+                })
+                .catch((error) => {
+                    // Handle login error, show error message
+                    var errorMessage = error.message;
+                    alert('Login failed: ' + errorMessage);
+                });
+
+            // Prevent the default form submission
+            return false;
+        }
+    </script>
+</body>
+
+</html>

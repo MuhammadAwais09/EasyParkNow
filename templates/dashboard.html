@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
+<title>Dashboard</title>
+<link rel="icon" href="/static/titleIcon.png" type="image/x-icon">
+<style>
+  body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+  }
+
+  .sidebar {
+    height: 100%;
+    width: 250px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: #222;
+    padding-top: 20px;
+    color: white;
+  }
+
+  .sidebar-header {
+    text-align: center;
+    margin-bottom: 20px;
+    padding: 10px;
+    background-color: rgb(37, 150, 190);
+  }
+
+  .logo {
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
+  }
+
+  .user-profile {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+
+  .user-image {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+
+  .options {
+    padding: 10px 0;
+    text-align: center;
+  }
+
+  .option {
+    margin-bottom: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+
+  .option:hover {
+    background-color: #444;
+  }
+  
+  .top-navbar {
+    background-color: rgb(37, 150, 190);
+    color: white;
+    padding: 15px;
+  }
+
+  .user-card {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    margin-top: 100px;
+  }
+
+  .card-container {
+    display: flex;
+    justify-content: space-between;
+    padding: 20px;
+  }
+
+  .card {
+    flex: 0 0 calc(50% - 10px);
+    background-color: #fff;
+    padding: 10px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+    margin: 0 10px; /* Added margin on both sides */
+  }
+  
+  .card:first-child {
+    margin-left: 250px; /* Width of the sidebar */
+  }
+
+  .card:last-child {
+    margin-right: 100px; /* Added margin on the right side of the last card */
+  }
+  .content {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        padding: 20px;
+        margin-left: 260px; 
+        margin-top: 10px; 
+    }
+
+        /* Adjust the table style */
+        #invoicesTable {
+            width: 80%;
+            margin: 0 auto;
+            border-collapse: collapse;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        #invoicesTable th,
+        #invoicesTable td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+            border-right: 1px solid #ddd; /* Add border to cells */
+        }
+
+        #invoicesTable th:last-child,
+        #invoicesTable td:last-child {
+            border-right: none; /* Remove right border from last column */
+        }
+
+        #invoicesTable th {
+            background-color: rgb(37, 150, 190);
+            color: white;
+            border-top: 2px solid white; /* Add top border to header cells */
+        }
+
+        /* Adjust DataTables style */
+        .dataTables_wrapper {
+            padding: 20px;
+        }
+        .checked-out {
+        background-color: green !important; /* Use !important to override DataTables styling */
+        color: white; /* Adjust text color if needed */
+    }
+    .expired {
+        background-color: red !important;
+        color: white;
+    }
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+
+    .spinning-image {
+        animation: spin 3s linear infinite;
+        animation-play-state: paused; /* Start with animation paused */
+    }
+</style>
+</head>
+<body>
+    <div class="top-navbar">
+        <h2 style="text-align: center; color: black;">Dashboard</h2>
+      </div>
+        <div id="checkout-message" style="display: none;">
+            <p>Checked out at: <span id="checkout-time"></span></p>
+            <p>Parking Fee: <span id="parking-fee"></span></p>
+        </div>
+  
+  <div class="sidebar">
+    <div class="sidebar-header">
+      <h3>Easy Park Now</h3>
+    </div>
+    <div class="user-profile">
+      <img class="user-image spinning-image" src="/static/userprofile.jpg" alt="User Image">
+  </div>
+  </div>
+
+  <div class="content">
+    <table id="invoicesTable" class="display">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Car Name</th>
+          <th>Car Number</th>
+          <th>Start Time</th>
+          <th>End Time</th>
+          <th>Duration</th>
+          <th>Parking Fee</th>
+          <th>Slot Name</th>
+          <th>Phone Number</th>
+          <th>Check Out</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for invoice in invoices %}
+        <tr>
+          <td>{{ invoice['name'] }}</td>
+          <td>{{ invoice['car_name'] }}</td>
+          <td>{{ invoice['car_number'] }}</td>
+          <td>{{ invoice['start_time'] }}</td>
+          <td>{{ invoice['end_time'] }}</td>
+          <td>{{ invoice['duration'] }} hours</td>
+          <td>{{ invoice['parking_fee'] }}</td>
+          <td>{{ invoice['slot'] }}</td>
+          <td>{{ invoice['phone_number'] }}</td>
+          <td>
+            <button class="checkout-button">Checkout</button>
+        </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <script>
+    $(document).ready(function() {
+        $('#invoicesTable').DataTable({
+            "order": [[4, "asc"]] // Sort by the 5th column (End Time) in ascending order
+        });
+
+        // Handle checkout button click event
+        $('#invoicesTable').on('click', '.checkout-button', function() {
+            var row = $(this).closest('tr');
+            var endTimeString = row.find('td:nth-child(5)').text();
+            var endTime = new Date(endTimeString);
+            var currentTime = new Date();
+            var recordId = row.attr('data-record-id');
+
+            if (!row.hasClass('checked-out')) {
+                // Show confirm dialog for checkout
+                var message = "Do you want to checkout this record?";
+                if (endTime <= currentTime) {
+                    var timeDifference = Math.abs(currentTime - endTime);
+                    var minutes = Math.floor(timeDifference / 60000); // Convert milliseconds to minutes
+                    var price = minutes * 5; // 1 min = 5 rupees
+                    message += "\n\nNote: Time expired. Checkout time: " + currentTime.toLocaleTimeString() +
+                               ". Total price: " + price + " rupees.";
+                }
+                var confirmCheckout = confirm(message);
+                
+                if (confirmCheckout) {
+                    // Send AJAX request to backend to remove the record
+                    $.ajax({
+                        url: '/remove-invoice', // Change to your backend endpoint
+                        method: 'POST',
+                        data: { recordId: recordId },
+                        success: function(response) {
+                            // Remove row from table
+                            row.remove();
+                            alert("Record removed successfully.");
+                        },
+                        error: function(error) {
+                            alert("An error occurred while removing the record: " + error.statusText);
+                        }
+                    });
+                }
+            }
+        });
+
+        // Update row styles based on expiration status
+        setInterval(updateRowStyles, 1000); // Update every second
+
+        function updateRowStyles() {
+            var currentTime = new Date();
+            var rows = $('#invoicesTable tbody tr');
+            rows.each(function() {
+                var endTimeString = $(this).find('td:nth-child(5)').text();
+                var endTime = new Date(endTimeString);
+                if (endTime <= currentTime && !$(this).hasClass('checked-out')) {
+                    $(this).addClass('expired');
+                } else {
+                    $(this).removeClass('expired');
+                }
+            });
+        }
+    });
+
+    document.addEventListener("DOMContentLoaded", function() {
+        var spinningImage = document.querySelector(".spinning-image");
+
+        function startSpinning() {
+            spinningImage.style.animationPlayState = "running";
+            setTimeout(stopSpinning, 3000); // Stop after 3 seconds
+        }
+
+        function stopSpinning() {
+            spinningImage.style.animationPlayState = "paused";
+            setTimeout(startSpinning, 60000); // Start again after 1 minute
+        }
+
+        // Start the animation loop
+        startSpinning();
+    });
+</script>
+
+
+</body>
+</html>
