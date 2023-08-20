@@ -154,25 +154,50 @@
         background-color: red !important;
         color: white;
     }
+    .sidebar-button {
+    display: block;
+    width: 100%;
+    padding: 12px 20px;
+    margin: 20px 0; /* Add top and bottom margins */
+    font-size: 16px;
+    margin-left: 5px;
+    font-weight: bold;
+    color: white;
+    background-color: #3498db;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease-in-out;
+  }
 
+  .sidebar-button:hover {
+    background-color: #2980b9;
+  }
 </style>
 </head>
 <body>
     <div class="top-navbar">
         <h2 style="text-align: center; color: black;">Dashboard</h2>
       </div>
-        
+        <div id="checkout-message" style="display: none;">
+            <p>Checked out at: <span id="checkout-time"></span></p>
+            <p>Parking Fee: <span id="parking-fee"></span></p>
+        </div>
   
   <div class="sidebar">
     <div class="sidebar-header">
       <h3>Easy Park Now</h3>
     </div>
     <div class="user-profile">
-      <img class="user-image" src="/static/userprofile.jpg" alt="User Image">
+      <img class="user-image spinning-image" src="/static/userprofile.jpg" alt="User Image">
   </div>
+  <div style="margin-top: 60px;">
+  <button class="sidebar-button" id="todayRecordsButton">Today's Records</button>
+</div>
   </div>
 
   <div class="content">
+   
     <table id="invoicesTable" class="display">
       <thead>
         <tr>
@@ -196,7 +221,7 @@
           <td>{{ invoice['car_number'] }}</td>
           <td>{{ invoice['start_time'] }}</td>
           <td>{{ invoice['end_time'] }}</td>
-          <td>{{ invoice['duration'] }} hours</td>
+          <td>{{ invoice['duration'] }}</td>
           <td>{{ invoice['parking_fee'] }}</td>
           <td>{{ invoice['slot'] }}</td>
           <td>{{ invoice['phone_number'] }}</td>
@@ -271,6 +296,18 @@
             });
         }
     });
+    $('#todayRecordsButton').on('click', function() {
+            // Clear any existing search/filter
+            $('#invoicesTable').DataTable().search('').draw();
+
+            // Get today's date
+            var currentDate = new Date();
+            var currentDateFormatted = currentDate.toISOString().split('T')[0];
+
+            // Filter records based on today's date
+            $('#invoicesTable').DataTable().column(3).search(currentDateFormatted).draw();
+        });
+
 </script>
 
 

@@ -106,16 +106,17 @@ def invoice():
         phone_number = request.form['phoneNumber']
 
         # Calculate parking duration in hours and minutes
-        duration_seconds = (end_time - start_time).seconds
-        duration_hours = duration_seconds // 3600  # Convert seconds to hours
-        duration_minutes = (duration_seconds % 3600) // 60  # Convert remaining seconds to minutes
+        duration_seconds = (end_time - start_time).total_seconds()  # Get total seconds between start and end
+        duration_hours = duration_seconds / 3600  # Convert seconds to hours
 
-        # Calculate total duration in fractional hours
-        total_duration = duration_hours + (duration_minutes / 60)
-        formatted_duration = "{:.2f}".format(total_duration)
-        # Calculate parking fee based on duration (example: 30 rupees per hour)
+# Calculate total parking fee based on duration (example: 30 rupees per hour)
         parking_fee_per_hour = 30
-        parking_fee = total_duration * parking_fee_per_hour
+        parking_fee = duration_hours * parking_fee_per_hour
+
+# Format the total duration as a string in hours and minutes
+        total_duration_hours = int(duration_hours)
+        total_duration_minutes = int((duration_hours - total_duration_hours) * 60)
+        formatted_duration = f"{total_duration_hours} hours {total_duration_minutes} minutes"
 
         try:
             # Save data under the user's ID
@@ -127,7 +128,7 @@ def invoice():
                 'car_number': car_number,
                 'start_time': str(start_time),
                 'end_time': str(end_time),
-                'duration': total_duration,
+                'duration': formatted_duration,
                 'parking_fee': parking_fee,
                 'slot': slot_name,
                 'phone_number': phone_number
@@ -136,7 +137,7 @@ def invoice():
 
             # Pass form data and calculated fee to the template
             return render_template('invoice.html', name=name, car_name=car_name, car_number=car_number,
-                                   start_time=start_time, end_time=end_time, duration=total_duration,
+                                   start_time=start_time, end_time=end_time, duration=formatted_duration,
                                    parking_fee=parking_fee, slot_name=request.form['slot'], phone_number=phone_number)
 
         except Exception as e:
