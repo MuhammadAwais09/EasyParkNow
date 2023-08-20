@@ -333,41 +333,42 @@
     var db = firebase.database();
 
     document.addEventListener("DOMContentLoaded", function () {
-      const parkingSlots = document.querySelectorAll(".parking-slot");
+    const parkingSlots = document.querySelectorAll(".parking-slot");
 
-      parkingSlots.forEach(slot => {
-        const slotId = slot.getAttribute("data-slot-id");
-        const slotRef = db.ref(slotId);
+    parkingSlots.forEach(slot => {
+      const slotId = slot.getAttribute("data-slot-id");
+      const slotRef = db.ref(slotId);
 
-        slotRef.on('value', snapshot => {
-          const slotStatus = snapshot.val() || 0;
-          updateSlotStyle(slot, slotStatus);
-          setupSlotClickListener(slot, slotId, slotStatus);
-        });
+      slotRef.on('value', snapshot => {
+        const slotStatus = snapshot.val() || 0;
+        updateSlotStyle(slot, slotStatus);
+        setupSlotClickListener(slot, slotId, slotStatus);
       });
     });
+  });
 
-    function updateSlotStyle(slot, slotStatus) {
-      if (slotStatus === 1) {
-        slot.style.backgroundColor = "#D32F2F"; // Red when occupied
-      } else {
-        slot.style.backgroundColor = "#7ED321"; // Green when available
-      }
+  function updateSlotStyle(slot, slotStatus) {
+    if (slotStatus === 1) {
+      slot.style.backgroundColor = "#D32F2F"; // Red when occupied
+    } else if (slotStatus === 2) {
+      slot.style.backgroundColor = "#007bff"; // Blue when clicked
+    } else {
+      slot.style.backgroundColor = "#7ED321"; // Green when available
     }
+  }
 
-    function setupSlotClickListener(slot, slotId, slotStatus) {
-      if (!slot.classList.contains("unclickable")) {
-        slot.addEventListener("click", async function () {
-          if (slotStatus !== 1) {
-            slot.style.backgroundColor = "#007bff";
-            window.location.href = `/form?slot=${slotId}`;
-          }
-        
-        });
-      }
+  function setupSlotClickListener(slot, slotId, slotStatus) {
+    if (!slot.classList.contains("unclickable")) {
+      slot.addEventListener("click", async function () {
+        if (slotStatus === 0) {
+          // Change slot status to "clicked" (2) in the database
+          db.ref(slotId).set(2);
+          window.location.href = `/form?slot=${slotId}`;
+        }
+      });
     }
-  })();
-
+  }
+})();
   
   </script>
 

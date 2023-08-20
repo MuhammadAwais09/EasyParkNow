@@ -51,6 +51,8 @@ def dashboard():
 
 @app.route('/', methods=['GET', 'POST'])
 def login():
+    message = None  # Initialize the message variable
+
     if request.method == 'POST':
         email = request.form['email']
         password = request.form['password']
@@ -65,10 +67,10 @@ def login():
                 # If successful, redirect to the home page
                 return redirect(url_for('home'))
         except Exception as e:
-            # Handle login error, show error message
-            flash(f'Login failed: {str(e)}', 'error')
+            # Handle login error, set error message
+            message = f'Login failed: {str(e)}'
 
-    return render_template('login.html')
+    return render_template('login.html', message=message)
 
 @app.route('/remove-invoice', methods=['POST'])
 def remove_invoice():
