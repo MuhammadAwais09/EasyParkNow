@@ -193,7 +193,6 @@ def history():
         user = auth.current_user
         user_id = user['localId']
         
-        # Fetch invoices for the current user from Firebase and convert to a list of dictionaries
         user_invoices = db.child('invoices').child(user_id).get().val()
         invoices_list = []
         
@@ -204,7 +203,6 @@ def history():
         
         return render_template('history.html', invoices=invoices_list)
     except Exception as e:
-        # Handle error here
         return render_template('history.html', invoices=[])
 
 
@@ -272,9 +270,9 @@ def book():
 
 
 
-@app.route('/logout')  # Add the '/logout' route for logout functionality
+@app.route('/logout')
 def logout():
-    # Your logout logic here
+    session.pop('user_id', None) 
     return redirect(url_for('login'))
 
 @app.route('/forgot-password', methods=['GET', 'POST'])
